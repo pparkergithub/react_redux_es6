@@ -4,12 +4,19 @@ import App from './components/App';
 import { render } from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import './styles/styles.css'; //webpack can import css files too!
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import '../node_modules/bootstrap/dist/css/bootstrap.css';
+import ConfigureStore from './store/ConfigureStore';
+import {Provider} from 'react-redux';
+//import {} from 'react-router-redux';
+
+const store = ConfigureStore();
 
 render ((
-		<BrowserRouter>
-			<App />
-		</BrowserRouter>
+		<Provider store={store}>
+			<BrowserRouter>
+				<App />
+			</BrowserRouter>
+		</Provider>
 	),
 	document.getElementById('app')
 );

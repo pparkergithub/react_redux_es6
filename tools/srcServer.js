@@ -11,11 +11,10 @@ const app = Express(); //setup express
 const compiler = Webpack(Config); //use webpack configuration
 
 app.use(require('webpack-dev-middleware')(compiler, {
-	noInfo: true,
 	publicPath: Config.output.publicPath
 }));
 
-app.use(require('webpack-hot-middleware')(compiler));
+//app.use(require('webpack-hot-middleware')(compiler));
 
 app.get('*', function(req, res) { //wildcard means serve up index.html for all requests
 	res.sendFile(Path.join( __dirname, '../src/index.html'));
