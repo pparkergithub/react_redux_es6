@@ -1,70 +1,64 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import * as CourseActions from '../../actions/CourseActions';
 import PropTypes from 'prop-types';
-import {bindActionCreators} from 'redux';
+import TextInput from '../common/TextInput';
+import SelectInput from '../common/SelectInput';
 
-class CourseForm extends React.Component {
-	constructor(props, context) {
-		super(props, context);
+const CourseForm = ({course, allAuthors, onSave, onChange, loading, errors}) => {
+	return (
+		<form>
+			<h1>Manage Course</h1>
+			<TextInput
+				name="title"
+				label="Title"
+				value={course.title}
+				onChange={onChange}
+				error={errors.title}
+			/>
 
-		this.state = {
-			course: {title: ""}
-		};
+			<SelectInput
+				name="authorId"
+				label="Author"
+				defaultOption="Select Author"
+				options={allAuthors}
+				value={course.authorId}
+				onChange={onChange}
+				error={errors.authorId}
+			/>
 
-		this.onTitleChange = this.onTitleChange.bind(this);
-		this.onClickSave = this.onClickSave.bind(this);
-	}
+			<TextInput
+				name="category"
+				label="Category"
+				value={course.category}
+				onChange={onChange}
+				error={errors.category}
+			/>
 
-	courseRow(course, index) {
-		return <div key={index}>{course.title}</div>;
-	}
+			<TextInput
+				name="length"
+				label="Length"
+				value={course.length}
+				onChange={onChange}
+				error={errors.length}
+			/>
 
-	onTitleChange(event) {
-		const course = this.state.course;
-		course.title = event.target.value;
-		this.setState({course: course});
-	}
-
-	onClickSave() {
-		this.props.actions.CreateCourse(this.state.course);
-	}
-	render() {
-		return (
-			<div>
-				<div>
-					{this.props.courses.map(this.courseRow)}
-				</div>
-				<h2>Add Course</h2>
-				<input
-					type="text"
-					onChange={this.onTitleChange}
-					value={this.state.course.title} />
-
-				<input
-					type="submit"
-					value="Save"
-					onClick={this.onClickSave} />
-			</div>
-		);
-	}
-}
-
-CourseForm.propTypes = {
-	courses: PropTypes.array.isRequired,
-	actions: PropTypes.object.isRequired
+			<input
+				type="submit"
+				disabled={loading}
+				value={loading ? 'Saving...' : 'Save'}
+				className="btn btn-primary"
+				onClick={onSave}
+			/>
+		</form>
+	);
 };
 
-function mapStateToProps(state, ownProps) {
-	return {
-		courses: state.courses
-	};
-}
+CourseForm.propTypes = {
+	course: PropTypes.object.isRequired,
+	allAuthors: PropTypes.array,
+	onSave: PropTypes.func.isRequired,
+	onChange: PropTypes.func.isRequired,
+	loading: PropTypes.bool,
+	errors: PropTypes.object
+};
 
-function mapDispatchToProps(dispatch) {
-	return {
-		actions: bindActionCreators(CourseActions, dispatch)
-	}	;
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CourseForm);
+export default CourseForm;
