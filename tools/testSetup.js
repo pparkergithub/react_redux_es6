@@ -33,6 +33,10 @@ require.extensions['.jpg'] = function () {return null;};
 // to simulate a browser environment for tests.
 var jsdom = require('jsdom').JSDOM;
 
+var enzyme = require('enzyme');
+var Adapter = require('enzyme-adapter-react-16');
+enzyme.configure({ adapter: new Adapter() });
+
 var exposedProperties = ['window', 'navigator', 'document'];
 
 const { document } = (new jsdom('')).window;

@@ -9,6 +9,7 @@ import ConfigureStore from './store/ConfigureStore';
 import {Provider} from 'react-redux';
 import { LoadCourses } from "./actions/CourseActions";
 import {LoadAuthors} from "./actions/AuthorActions";
+import '../node_modules/toastr/build/toastr.min.css';
 //import {} from 'react-router-redux';
 
 const store = ConfigureStore();

@@ -8,7 +8,7 @@
     "open:src": "babel-node tools/srcServer.js",
     "lint": "node_modules/.bin/esw webpack.config.* src tools",
     "lint:watch": "npm run lint -- --watch",
-    "test": "mocha --reporter progress tools/testSetup.js \"src/**/*.test.js\"",
+    "test": "mocha --reporter spec tools/testSetup.js \"src/**/*.test.js\"",
     "test:watch": "npm run test -- --watch"
   },
   "author": "Phil Parker",
@@ -16,6 +16,7 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "bootstrap": "^3.3.7",
+    "enzyme-adapter-react-16": "^1.1.1",
     "history": "^4.7.2",
     "jquery": "^3.2.1",
     "prop-types": "^15.6.0",

@@ -10,25 +10,29 @@ class CoursesPage extends React.Component {
 	constructor(props, context) {
 		super(props, context);
 
+		this.state = { redirect: false };
+
 		this.redirectToAddCoursePage = this.redirectToAddCoursePage.bind(this);
 	}
 
 	redirectToAddCoursePage() {
-		return (
-			<Redirect to="/course"/>
-		);
+		this.setState({redirect: true});
 	}
 
 	render() {
 		const {courses} = this.props;
 
-		return (
-			<div>
-				<h1>Courses</h1>
-				<input type="submit" className="btn btn-primary" onClick={this.redirectToAddCoursePage} value="Add Course"/>
-				<CourseList courses={courses}/>
-			</div>
-		);
+		if (this.state.redirect) {
+			return <Redirect to="/course"/>;
+		} else {
+			return (
+				<div>
+					<h1>Courses</h1>
+					<input type="submit" className="btn btn-primary" onClick={this.redirectToAddCoursePage} value="Add Course"/>
+					<CourseList courses={courses}/>
+				</div>
+			);
+		}
 	}
 }
 
