@@ -6,8 +6,9 @@ import * as CourseActions from '../../actions/CourseActions';
 import CourseForm from './CourseForm';
 import { Redirect } from 'react-router-dom';
 import Toastr from 'toastr';
+import {authorsFormattedForDropdown} from '../../selectors/selectors';
 
-class ClassName extends React.Component {
+export class ManageCoursePage extends React.Component { //can export unconnected component this way, but the connected one is still defaulted at the bottom
 	constructor(props, context) {
 		super(props, context);
 
@@ -38,18 +39,33 @@ class ClassName extends React.Component {
 
 	saveCourse(event) {
 		event.preventDefault();
-		this.setState({saving: true});
-		this.props.actions.SaveCourse(this.state.course)
-			.then(() => this.redirect())
-			.catch(error => {
-				Toastr.error(error);
-			});
+		if (this.courseFormIsValid()) {
+			this.setState({saving: true});
+			this.props.actions.SaveCourse(this.state.course)
+				.then(() => this.redirect())
+				.catch(error => {
+					Toastr.error(error);
+				});
+		}
 		this.setState({saving: false});
 	}
 
 	redirect() {
 		this.setState({redirect: true});
 		Toastr.success('Course saved');
+	}
+
+	courseFormIsValid() {
+		let formIsValid = true;
+		let errors = {};
+
+		if(this.state.course.title.length < 5) {
+			errors.title = 'Title must be at least 5 characters';
+			formIsValid = false;
+		}
+
+		this.setState({errors: errors});
+		return formIsValid;
 	}
 
 	render() {
@@ -71,7 +87,7 @@ class ClassName extends React.Component {
 	}
 }
 
-ClassName.propTypes = {
+ManageCoursePage.propTypes = {
 	course: PropTypes.object.isRequired,
 	authors: PropTypes.array.isRequired,
 	actions: PropTypes.object.isRequired
@@ -94,16 +110,9 @@ function mapStateToProps(state, ownProps) {
 		course = GetCourseById(state.courses, courseId);
 	}
 
-	const authorsFormattedForDropdown = state.authors.map(author => {
-		return {
-			value: author.id,
-			text: author.firstName + ' ' + author.lastName
-		};
-	});
-
 	return {
 		course: course,
-		authors: authorsFormattedForDropdown
+		authors: authorsFormattedForDropdown(state.authors)
 	};
 }
 
@@ -113,4 +122,4 @@ function mapDispatchToProps(dispatch) {
 	};
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ClassName);
+export default connect(mapStateToProps, mapDispatchToProps)(ManageCoursePage);
