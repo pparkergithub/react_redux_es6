@@ -5,14 +5,17 @@ import LoadingDots from './LoadingDots';
 import {connect} from 'react-redux';
 
 class Header extends React.Component {
+
 	render() {
+		const activeStyle = {color: 'blue'};
+
 		return (
 			<nav className="navbar navbar-default">
 				<div className="container-fluid">
 					<ul className="nav navbar-nav">
-						<li><NavLink to={"/"} activeClassName="active">Home</NavLink></li>
-						<li><NavLink to={"/courses"} activeClassName="active">Courses</NavLink></li>
-						<li><NavLink to={"/about"} activeClassName="active">About</NavLink></li>
+						<li><NavLink to={"/"} activeStyle={activeStyle}>Home</NavLink></li>
+						<li><NavLink to={"/courses"} activeStyle={activeStyle}>Courses</NavLink></li>
+						<li><NavLink to={"/about"} activeStyle={activeStyle}>About</NavLink></li>
 						{this.props.loading && <li><NavLink to="#"><LoadingDots interval={100} dots={20}/></NavLink></li>}
 					</ul>
 				</div>

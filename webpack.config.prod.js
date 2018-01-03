@@ -7,12 +7,8 @@ const GLOBALS = {
 };
 
 export default {
-	//debug: true,
 	devtool: 'source-map',
-	//noInfo: false,
-	entry: [
-		Path.resolve(__dirname, 'src/index.js')
-	],
+	entry: './src/index',
 	target: 'web', //could be Node if building an app to work in Node
 	output: {
 		path: Path.resolve(__dirname, 'dist'), // Note: Physical files are only output by the production build task `npm run build`.
@@ -20,23 +16,12 @@ export default {
 		filename: 'bundle.js'
 	},
 	devServer: {
-		contentBase: Path.resolve(__dirname, 'dist'),
-		stats: {
-			chunks: false,
-			errors: true,
-			errorDetails: true,
-			warnings: true
-		}
+		contentBase: './dist'
 	},
 	plugins: [
-		new Webpack.optimize.OccurrenceOrderPlugin(),
 		new Webpack.DefinePlugin(GLOBALS),
 		new ExtractTextPlugin('styles.css'),
-		new Webpack.optimize.UglifyJsPlugin(),
-		new Webpack.LoaderOptionsPlugin({
-			debug: true,
-			noInfo: true
-		})
+		new Webpack.optimize.UglifyJsPlugin()
 	],
 	module: {
 		rules: [
@@ -48,25 +33,37 @@ export default {
 			{
 				test: /\.css$/,
 				use: ExtractTextPlugin.extract({
-					use: 'css-loader',
-					fallback: 'style-loader'
+					fallback: require.resolve('style-loader'),
+					use: [
+						{
+							loader: require.resolve('css-loader'),
+							options: {
+								importLoaders: 1,
+								minimize: true,
+								sourceMap: true
+							}
+						}
+					]
 				})
 			},
 			{
 				test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-				use: 'file-loader'
+				loader: 'file-loader'
 			},
 			{
 				test: /\.(woff|woff2)$/,
-				use: 'url-loader?prefix=font/&limit=5000'
+				options: {limit: 5000, prefix: 'font/'},
+				loader: 'url-loader'
 			},
 			{
 				test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-				use: 'url-loader?limit=10000&mimetype=application/octet-stream'
+				options: {limit: 10000, mimetype: 'application/octet-stream'},
+				loader: 'url-loader'
 			},
 			{
 				test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-				use: 'url-loader?limit=10000&mimetype=image/svg+xml'
+				options: {limit: 10000, mimetype: 'image/svg+xml'},
+				loader: 'url-loader'
 			}
 		]
 	}

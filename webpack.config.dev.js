@@ -2,13 +2,11 @@ import Webpack from 'webpack';
 import Path from 'path';
 
 export default {
-	//debug: true,
 	devtool: 'inline-source-map',
-	//noInfo: false,
 	entry: [
 		'eventsource-polyfill', // necessary for hot reloading with IE
 		//'webpack-hot-middleware/client?reload=true', //note that it reloads the page if hot module reloading fails.
-		Path.resolve(__dirname, 'src/index.js')
+		'./src/index'
 	],
 	target: 'web', //could be Node if building an app to work in Node
 	output: {
@@ -26,7 +24,6 @@ export default {
 		}
 	},
 	plugins: [
-		new Webpack.HotModuleReplacementPlugin(),
 		new Webpack.NoEmitOnErrorsPlugin(),
 		new Webpack.LoaderOptionsPlugin({
 			debug: true,
@@ -44,24 +41,27 @@ export default {
 				test: /\.css$/,
 				use: [
 					'style-loader',
-					'css-loader'
+					{loader: 'css-loader', options: {sourcemap: true}}
 				]
 			},
 			{
 				test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-				use: 'file-loader'
+				loader: 'file-loader'
 			},
 			{
 				test: /\.(woff|woff2)$/,
-				use: 'url-loader?prefix=font/&limit=5000'
+				options: {limit: 5000, prefix: 'font/'},
+				loader: 'url-loader'
 			},
 			{
 				test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-				use: 'url-loader?limit=10000&mimetype=application/octet-stream'
+				options: {limit: 10000, mimetype: 'application/octet-stream'},
+				loader: 'url-loader'
 			},
 			{
 				test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-				use: 'url-loader?limit=10000&mimetype=image/svg+xml'
+				options: {limit: 10000, mimetype: 'image/svg+xml'},
+				loader: 'url-loader'
 			}
 		]
 	}
